@@ -25,7 +25,11 @@ io.on('connection', function(socket){
   });
 
   socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
+    let d = new Date();
+    let hour = (d.getHours() < 10 ? '0' : '') + d.getHours();
+    let minute = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+    messages.push({message: msg, user: socket.username, time: hour + ':' + minute});
+    io.emit('chat message', hour + ':' + minute + ' ' + socket.username + ': ' + msg);
   });
 });
 
