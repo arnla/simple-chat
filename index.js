@@ -15,6 +15,7 @@ app.get('/', function(req, res){
 io.on('connection', function(socket){
   socket.on('user join', function() {
     socket.username = 'user' + ctr;
+    socket.color = '#000000'
     ctr++;
     users.push(socket.username);
     console.log(socket.username + ' has joined the chat');
@@ -49,16 +50,11 @@ io.on('connection', function(socket){
     let hour = (d.getHours() < 10 ? '0' : '') + d.getHours();
     let minute = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
     if (messages.length === 200) {
-      messages[0] = {message: msg, user: socket.username, time: hour + ':' + minute};
-      if (messagesHeadInd === 199) {
-        messagesHeadInd = 0;
-      } else {
-        messagesHeadInd++;
-      }
-    } else {
-      messages.push({message: msg, user: socket.username, time: hour + ':' + minute});
+      messages.shift();
     }
-    io.emit('chat message', hour + ':' + minute + ' ' + socket.username + ': ' + msg);
+    let newMsg = {message: msg, user: socket.username, time: hour + ':' + minute, color: socket.color};
+    messages.push(newMsg);
+    io.emit('chat message', newMsg);
   });
 });
 
