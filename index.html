@@ -14,6 +14,7 @@
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
       #messages { margin-bottom: 40px }
+      .right #users {list-style-type: none; }
       hr {border: 2px solid black;}
       h3 {margin: 5px;}
     </style>
@@ -52,6 +53,13 @@
         socket.on('chat message', function(msg){
           $('#messages').append($('<li>').text(msg));
           window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        socket.on('update online users', function(data) {
+          $('#users').empty();
+          $.each(data, function(index, value) {
+            $('#users').append('<li>' + value + '</li>');
+          });
         });
       });
     </script>

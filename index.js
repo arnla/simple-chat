@@ -35,11 +35,13 @@ io.on('connection', function(socket){
     }
 
     socket.emit('user join', socket.username);
+    io.emit('update online users', users);
   });
 
   socket.on('disconnect', function(data) {
     users.splice(users.indexOf(socket.username), 1);
     console.log(socket.username + ' has left the chat');
+    io.emit('update online users', users);
   });
 
   socket.on('chat message', function(msg){
