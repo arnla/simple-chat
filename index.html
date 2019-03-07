@@ -39,17 +39,20 @@
       $(function () {
         var socket = io();
 
+        // new user joins the chat
         socket.emit('user join');
         socket.on('user join', function(data) {
           $('#usernameDisplay').text(data);
         });
 
+        // the user sends a message to the chat
         $('form').submit(function(){
           socket.emit('chat message', $('#m').val());
           $('#m').val('');
           return false;
         });
 
+        // another client has sent a message to the chat
         socket.on('chat message', function(msg){
           if (msg.user === $('#usernameDisplay').text()) {
             $('#messages').append('<li style="font-weight: bold;">' + msg.time + ' <span style="color: ' + msg.color + '">' + msg.user + ': </span>' + msg.message + '</li>');
@@ -59,6 +62,7 @@
           window.scrollTo(0, document.body.scrollHeight);
         });
 
+        // another user has left the chat
         socket.on('update online users', function(data) {
           $('#users').empty();
           $.each(data, function(index, value) {

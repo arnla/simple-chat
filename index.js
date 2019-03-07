@@ -12,6 +12,8 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
+
+  // a new user joins the chat
   socket.on('user join', function() {
     socket.username = 'user' + ctr;
     socket.color = '#000000'
@@ -32,12 +34,14 @@ io.on('connection', function(socket){
     io.emit('update online users', users);
   });
 
+  // a user leaves the chat
   socket.on('disconnect', function(data) {
     users.splice(users.indexOf(socket.username), 1);
     console.log(socket.username + ' has left the chat');
     io.emit('update online users', users);
   });
 
+  // a user has sent a message to the chat
   socket.on('chat message', function(msg){
     if (msg.startsWith('/nickcolor')) {
       socket.color = '#' + msg.substring(11, 17);
