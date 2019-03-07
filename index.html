@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>Simple Chat</title>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
@@ -20,7 +20,7 @@
   </head>
   <body>
     <div class="left">
-      <h3 id="usernameDisplay">User 1</h3>
+      <h3 id="usernameDisplay"></h3>
       <hr>
       <ul id="messages"></ul>
       <form action="">
@@ -39,6 +39,9 @@
         var socket = io();
 
         socket.emit('user join');
+        socket.on('user join', function(data) {
+          $('#usernameDisplay').text(data);
+        });
 
         $('form').submit(function(){
           socket.emit('chat message', $('#m').val());

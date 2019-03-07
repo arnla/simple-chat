@@ -33,6 +33,8 @@ io.on('connection', function(socket){
         socket.broadcast.emit('chat message', messages[i].time + ' ' + messages[i].user + ': ' + messages[i].message);
       }
     }
+
+    socket.emit('user join', socket.username);
   });
 
   socket.on('disconnect', function(data) {
