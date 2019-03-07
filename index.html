@@ -51,7 +51,11 @@
         });
 
         socket.on('chat message', function(msg){
-          $('#messages').append('<li>' + msg.time + ' <span style="color: ' + msg.color + '">' + msg.user + ': </span>' + msg.message + '</li>');
+          if (msg.user === $('#usernameDisplay').text()) {
+            $('#messages').append('<li style="font-weight: bold;">' + msg.time + ' <span style="color: ' + msg.color + '">' + msg.user + ': </span>' + msg.message + '</li>');
+          } else {
+            $('#messages').append('<li>' + msg.time + ' <span style="color: ' + msg.color + '">' + msg.user + ': </span>' + msg.message + '</li>');
+          }
           window.scrollTo(0, document.body.scrollHeight);
         });
 
