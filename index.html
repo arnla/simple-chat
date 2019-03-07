@@ -51,7 +51,7 @@
         });
 
         socket.on('chat message', function(msg){
-          $('#messages').append('<li>' + msg.time + ' <span style=\"color: \"' + msg.color + '\">' + msg.user + ': </span>' + msg.message + '</li>');
+          $('#messages').append('<li>' + msg.time + ' <span style="color: ' + msg.color + '">' + msg.user + ': </span>' + msg.message + '</li>');
           window.scrollTo(0, document.body.scrollHeight);
         });
 
