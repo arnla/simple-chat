@@ -43,12 +43,28 @@ io.on('connection', function(socket){
 
   // a user has sent a message to the chat
   socket.on('chat message', function(msg){
+    let d = new Date();
+    let hour = (d.getHours() < 10 ? '0' : '') + d.getHours();
+    let minute = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+
+    // user wants to change color
     if (msg.startsWith('/nickcolor')) {
       socket.color = '#' + msg.substring(11, 17);
-    } else {
-      let d = new Date();
-      let hour = (d.getHours() < 10 ? '0' : '') + d.getHours();
-      let minute = (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+      io.emit('chat message', {message: socket.username + ' has changed their nickname color to ' + socket.color, user: socket.username, time: hour + ':' + minute, color: socket.color});
+    } else if (msg.startsWith('/nick')) { // user wants to change nickname
+      let newNick = msg.substring(6, msg.length);
+      if (users.includes(newNick)) { // nickname is already taken
+        socket.emit('chat message', {message: 'That username is already taken!', user: 'admin', time: hour + ':' + minute, color: '#ff0000'});
+      } else { // change user's nickname
+        io.emit('chat message', {message: socket.username + ' has changed their nickname to ' + newNick, user: newNick, time: hour + ':' + minute, color: '#000000'});
+        let i = users.indexOf(socket.username);
+        users.splice(i, 1);
+        socket.username = newNick;
+        users.push(socket.username);
+        socket.emit('user join', socket.username);
+        io.emit('update online users', users);
+      }
+    } else { // user sent a regular message
       if (messages.length === 200) {
         messages.shift();
       }
