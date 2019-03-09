@@ -59,9 +59,9 @@
                                   '<h4 style="color: ' + msg.color + '">' + msg.user + '</h4>' +
                                   '<h4 class="time-stamp">' + msg.time + '</h4><br><p>' + msg.message + '</p></div></li>');
           } else {
-            $('#messages').append('<li><div class="chat-message" style="border: 2px solid ' + msg.color + '"><h4>' +
-                                  msg.user + '</h4>' + '<h4 class="time-stamp">' + msg.time + '</h4><br><p>' +
-                                  msg.message + '</p></div></li>');
+            $('#messages').append('<li><div class="chat-message" style="border: 2px solid ' + msg.color + '">' +
+                                  '<h4 style="color: ' + msg.color + '">' + msg.user + '</h4>' +
+                                  '<h4 class="time-stamp">' + msg.time + '</h4><br><p>' + msg.message + '</p></div></li>');
           }
           window.scrollTo(0, document.body.scrollHeight);
         });
