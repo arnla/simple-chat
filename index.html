@@ -11,7 +11,7 @@
       .left { float: left; position: relative; height: 100vh; width: 75vw; border-bottom: 1vh solid black; border-top: 1vh solid black; border-left: 1vw solid black; border-right: 0.5vw solid black;  }
       .right { margin-left: 75vw; position: relative; height: 100vh; width: 25vw; border-bottom: 1vh solid black; border-top: 1vh solid black; border-left: 0.5vw solid black; border-right: 1vw solid black; }
       .left #messages { list-style-type: none; margin: 0; padding: 10px; height: 90vh; overflow: auto; }
-      .right #users {list-style-type: none; }
+      .right #users {list-style-type: none; padding: 10px; }
       hr {border: solid black;}
       h3 {margin: 5px; max-height: 5vh;}
       .chat-message { position: relative; border: 2px solid black; padding: 10px; margin-bottom: 10px; }
@@ -20,7 +20,7 @@
   </head>
   <body>
     <div class="left">
-      <h3 id="usernameDisplay">Username</h3>
+      <h3 id="usernameDisplay"></h3>
       <hr>
       <ul id="messages"></ul>
       <form action="">
@@ -41,7 +41,8 @@
         // new user joins the chat
         socket.emit('user join');
         socket.on('user join', function(data) {
-          $('#usernameDisplay').text(data);
+          $('#usernameDisplay').text(data.user);
+          $('#usernameDisplay').css('color', data.color);
         });
 
         // the user sends a message to the chat
@@ -65,19 +66,11 @@
           window.scrollTo(0, document.body.scrollHeight);
         });
 
-
-
-
-
-
-
-
-
         // another user has left the chat
         socket.on('update online users', function(data) {
           $('#users').empty();
           $.each(data, function(index, value) {
-            $('#users').append('<li>' + value + '</li>');
+            $('#users').append('<li style="color: ' + value.color + '">' + value.user + '</li>');
           });
         });
       });
