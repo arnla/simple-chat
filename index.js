@@ -50,13 +50,13 @@ io.on('connection', function(socket){
     // user wants to change color
     if (msg.startsWith('/nickcolor')) {
       socket.color = '#' + msg.substring(11, 17);
-      io.emit('chat message', {message: socket.username + ' has changed their nickname color to ' + socket.color, user: socket.username, time: hour + ':' + minute, color: socket.color});
+      io.emit('chat message', {message: socket.username + ' has changed their nickname color to ' + socket.color, user: 'admin', time: hour + ':' + minute, color: socket.color});
     } else if (msg.startsWith('/nick')) { // user wants to change nickname
       let newNick = msg.substring(6, msg.length);
       if (users.includes(newNick)) { // nickname is already taken
         socket.emit('chat message', {message: 'That username is already taken!', user: 'admin', time: hour + ':' + minute, color: '#ff0000'});
       } else { // change user's nickname
-        io.emit('chat message', {message: socket.username + ' has changed their nickname to ' + newNick, user: newNick, time: hour + ':' + minute, color: '#000000'});
+        io.emit('chat message', {message: socket.username + ' has changed their nickname to ' + newNick, user: 'admin', time: hour + ':' + minute, color: '#000000'});
         let i = users.indexOf(socket.username);
         users.splice(i, 1);
         socket.username = newNick;
