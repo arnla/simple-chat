@@ -5,18 +5,17 @@
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
-      form { position: absolute; bottom: 0; height: 5%; width: 73.5vw; border-top: 4px solid black;}
+      form { position: absolute; bottom: 0; height: 5vh; width: 73.5vw; border-top: 4px solid black;}
       form #m {height: 100%; width: 90%;}
       form button {height: 100%; width: 10%;}
       .left { float: left; position: relative; height: 100vh; width: 75vw; border-bottom: 1vh solid black; border-top: 1vh solid black; border-left: 1vw solid black; border-right: 0.5vw solid black;  }
-      .right { margin-left: 75vw; position: relative; height: 100vh; width: 25vw; border-bottom: 1vh solid black; border-top: 1vh solid black; border-left: 0.5vw solid black; border-right: 1vw solid black; background-color: blue; }
-      .left #messages { list-style-type: none; margin: 0; padding: 0; height: 95%; background: pink; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-      #messages { margin-bottom: 40px }
-      .right #users {list-style-type: none; }
-      hr {border: 2px solid black;}
-      h3 {margin: 5px;}
+      .right { margin-left: 75vw; position: relative; height: 100vh; width: 25vw; border-bottom: 1vh solid black; border-top: 1vh solid black; border-left: 0.5vw solid black; border-right: 1vw solid black; }
+      .left #messages { list-style-type: none; margin: 0; padding: 10px; height: 90vh; overflow: auto; }
+      .right #users {list-style-type: none; padding: 10px; }
+      hr {border: solid black;}
+      h3 {margin: 5px; max-height: 5vh;}
+      .chat-message { position: relative; border: 2px solid black; padding: 10px; margin-bottom: 10px; }
+      .time-stamp { right: 10px; top: 10px; position: absolute; }
     </style>
   </head>
   <body>
@@ -42,7 +41,8 @@
         // new user joins the chat
         socket.emit('user join');
         socket.on('user join', function(data) {
-          $('#usernameDisplay').text(data);
+          $('#usernameDisplay').text(data.user);
+          $('#usernameDisplay').css('color', data.color);
         });
 
         // the user sends a message to the chat
@@ -55,9 +55,13 @@
         // another client has sent a message to the chat
         socket.on('chat message', function(msg){
           if (msg.user === $('#usernameDisplay').text()) {
-            $('#messages').append('<li style="font-weight: bold;">' + msg.time + ' <span style="color: ' + msg.color + '">' + msg.user + ': </span>' + msg.message + '</li>');
+            $('#messages').append('<li><div class="chat-message" style="border: 5px solid ' + msg.color + '">' +
+                                  '<h4 style="color: ' + msg.color + '">' + msg.user + '</h4>' +
+                                  '<h4 class="time-stamp">' + msg.time + '</h4><br><p>' + msg.message + '</p></div></li>');
           } else {
-            $('#messages').append('<li>' + msg.time + ' <span style="color: ' + msg.color + '">' + msg.user + ': </span>' + msg.message + '</li>');
+            $('#messages').append('<li><div class="chat-message" style="border: 2px solid ' + msg.color + '">' +
+                                  '<h4 style="color: ' + msg.color + '">' + msg.user + '</h4>' +
+                                  '<h4 class="time-stamp">' + msg.time + '</h4><br><p>' + msg.message + '</p></div></li>');
           }
           window.scrollTo(0, document.body.scrollHeight);
         });
@@ -66,7 +70,7 @@
         socket.on('update online users', function(data) {
           $('#users').empty();
           $.each(data, function(index, value) {
-            $('#users').append('<li>' + value + '</li>');
+            $('#users').append('<li style="color: ' + value.color + '">' + value.user + '</li>');
           });
         });
       });
