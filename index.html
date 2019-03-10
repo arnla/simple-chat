@@ -60,11 +60,11 @@
           if (msg.user === $('#usernameDisplay').text()) {
             $('#messages').append('<div class="chat-message" style="border: 5px solid ' + color + '">' +
                                   '<h4 style="color: ' + color + '">' + msg.user + '</h4>' +
-                                  '<h4 class="time-stamp">' + msg.time + '</h4><br><p>' + msg.message + '</p></div>');
+                                  '<h4 class="time-stamp">' + msg.hour + ':' + msg.min + '</h4><br><p>' + msg.message + '</p></div>');
           } else {
             $('#messages').append('<div class="chat-message" style="border: 2px solid ' + color + '">' +
                                   '<h4 style="color: ' + color + '">' + msg.user + '</h4>' +
-                                  '<h4 class="time-stamp">' + msg.time + '</h4><br><p>' + msg.message + '</p></div>');
+                                  '<h4 class="time-stamp">' + msg.hour + ':' + msg.min + '</h4><br><p>' + msg.message + '</p></div>');
           }
           scrollToBottom();
         });
