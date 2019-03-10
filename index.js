@@ -27,7 +27,7 @@ io.on('connection', function(socket){
       if (messages[i] == undefined) {
         break;
       }
-      socket.emit('chat message', messages[i]);
+      socket.emit('chat message', messages[i], users.find(u => u.user === messages[i].user).color);
     }
     io.emit('update online users', users);
   });
@@ -53,9 +53,10 @@ io.on('connection', function(socket){
       if (messages.length === 200) {
         messages.shift();
       }
-      let newMsg = {message: msg, user: socket.username, time: hour + ':' + minute, color: socket.color};
+
+      let newMsg = {message: msg, user: socket.username, time: hour + ':' + minute};
       messages.push(newMsg);
-      io.emit('chat message', newMsg);
+      io.emit('chat message', newMsg, users.find(u => u.user === socket.username).color);
     }
   });
 });
@@ -80,6 +81,10 @@ function changeNickname(io, socket, msg, hour, minute) {
     io.emit('nick message', {message: socket.username + ' has changed their nickname to ' + newNick, color: '#000000'});
     let i = users.findIndex(u => u.user === socket.username);
     users.splice(i, 1);
+
+    // update the username for the user's past messages
+    messages.find(u => u.user === socket.username).user = newNick;
+
     socket.username = newNick;
     users.push({user: socket.username, color: socket.color});
     socket.emit('user join', {user: socket.username, color: socket.color});

@@ -55,14 +55,14 @@
         });
 
         // another client has sent a message to the chat
-        socket.on('chat message', function(msg){
+        socket.on('chat message', function(msg, color){
           if (msg.user === $('#usernameDisplay').text()) {
-            $('#messages').append('<div class="chat-message" style="border: 5px solid ' + msg.color + '">' +
-                                  '<h4 style="color: ' + msg.color + '">' + msg.user + '</h4>' +
+            $('#messages').append('<div class="chat-message" style="border: 5px solid ' + color + '">' +
+                                  '<h4 style="color: ' + color + '">' + msg.user + '</h4>' +
                                   '<h4 class="time-stamp">' + msg.time + '</h4><br><p>' + msg.message + '</p></div>');
           } else {
-            $('#messages').append('<div class="chat-message" style="border: 2px solid ' + msg.color + '">' +
-                                  '<h4 style="color: ' + msg.color + '">' + msg.user + '</h4>' +
+            $('#messages').append('<div class="chat-message" style="border: 2px solid ' + color + '">' +
+                                  '<h4 style="color: ' + color + '">' + msg.user + '</h4>' +
                                   '<h4 class="time-stamp">' + msg.time + '</h4><br><p>' + msg.message + '</p></div>');
           }
           let chatDiv = document.getElementById('messages');
