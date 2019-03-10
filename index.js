@@ -77,7 +77,7 @@ function changeNickname(io, socket, msg, hour, minute) {
   if (users.some( u => u.user === newNick)) { // nickname is already taken
     socket.emit('nick message', {message: 'That username is already taken!', time: hour + ':' + minute, color: '#ff0000'});
   } else { // change user's nickname
-    io.emit('nick message', {message: socket.username + ' has changed their nickname to ' + newNick, time: hour + ':' + minute, color: '#000000'});
+    io.emit('nick message', {message: socket.username + ' has changed their nickname to ' + newNick, color: '#000000'});
     let i = users.findIndex(u => u.user === socket.username);
     users.splice(i, 1);
     socket.username = newNick;
