@@ -43,8 +43,7 @@
         socket.on('user join', function(data) {
           $('#usernameDisplay').text(data.user);
           $('#usernameDisplay').css('color', data.color);
-          let chatDiv = document.getElementById('messages');
-          chatDiv.scrollTop = messages.scrollHeight;
+          scrollToBottom();
         });
 
         // the user sends a message to the chat
@@ -65,18 +64,30 @@
                                   '<h4 style="color: ' + color + '">' + msg.user + '</h4>' +
                                   '<h4 class="time-stamp">' + msg.time + '</h4><br><p>' + msg.message + '</p></div>');
           }
-          let chatDiv = document.getElementById('messages');
-          chatDiv.scrollTop = messages.scrollHeight;
+          scrollToBottom();
         });
 
         socket.on('color message', function(msg) {
           $('#messages').append('<div style="text-align: center; margin-bottom: 10px;"><h5>' + msg.message +
                                 '<span style="color: ' + msg.color + '">' + msg.color + '</span></h1></div>');
+          scrollToBottom();
         });
 
         socket.on('nick message', function(msg) {
-          $('#messages').append('<div style="text-align: center; margin-bottom: 10px;"><h5>' + msg.message +
-                  '</h1></div>');
+          $('#messages').append('<div style="text-align: center; margin-bottom: 10px; color: ' + msg.color + '"><h5>' + msg.message +
+                                '</h1></div>');
+          scrollToBottom();
+        });
+
+        socket.on('error message', function(msg) {
+          $('#messages').append('<div style="text-align: center; margin-bottom: 10px; color: red;"><h5>' + msg.message +
+                                '</h1></div>');
+          scrollToBottom();
+        });
+
+        socket.on('connect disconnect message', function(msg) {
+          $('#messages').append('<div style="text-align: center; margin-bottom: 10px;"><h5>' + msg + '</h1></div>');
+          scrollToBottom();
         });
 
         // another user has left the chat
@@ -87,6 +98,11 @@
           });
         });
       });
+
+      function scrollToBottom() {
+        let chatDiv = document.getElementById('messages');
+        chatDiv.scrollTop = messages.scrollHeight;
+      }
     </script>
   </body>
 </html>

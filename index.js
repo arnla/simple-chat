@@ -30,6 +30,7 @@ io.on('connection', function(socket){
       socket.emit('chat message', messages[i], users.find(u => u.user === messages[i].user).color);
     }
     io.emit('update online users', users);
+    io.emit('connect disconnect message', socket.username + ' has joined the chat');
   });
 
   // a user leaves the chat
@@ -37,6 +38,7 @@ io.on('connection', function(socket){
     users.splice(users.findIndex(u => u.user === socket.username), 1);
     console.log(socket.username + ' has left the chat');
     io.emit('update online users', users);
+    io.emit('connect disconnect message', socket.username + ' has left the chat');
   });
 
   // a user has sent a message to the chat
@@ -66,7 +68,18 @@ http.listen(port, function(){
 });
 
 function changeColor(io, socket, msg, hour, minute) {
-  socket.color = '#' + msg.substring(11, 17);
+  let col = msg.substring(11, msg.length).toUpperCase();
+  if (col.length !== 6) {
+    socket.emit('error message', {message: col + ' is not a valid color code '});
+    return;
+  }
+  for (let i = 0; i < col.length; i++) {
+    if (!((col.charCodeAt(i) >= 65 && col.charCodeAt(i) <= 70) || (col.charCodeAt(i) >= 48 && col.charCodeAt(i) <= 57))) {
+      socket.emit('error message', {message: col + ' is not a valid color code '});
+      return;
+    }
+  }
+  socket.color = '#' + msg.substring(11, msg.length);
   io.emit('color message', {message: socket.username + ' has changed their nickname color to ', color: socket.color});
   users.find(u => u.user === socket.username).color = socket.color;
   io.emit('update online users', users);
@@ -76,7 +89,7 @@ function changeColor(io, socket, msg, hour, minute) {
 function changeNickname(io, socket, msg, hour, minute) {
   let newNick = msg.substring(6, msg.length);
   if (users.some( u => u.user === newNick)) { // nickname is already taken
-    socket.emit('nick message', {message: 'That username is already taken!', time: hour + ':' + minute, color: '#ff0000'});
+    socket.emit('nick message', {message: 'That username is already taken!', time: hour + ':' + minute, color: '#FF0000'});
   } else { // change user's nickname
     io.emit('nick message', {message: socket.username + ' has changed their nickname to ' + newNick, color: '#000000'});
     let i = users.findIndex(u => u.user === socket.username);
