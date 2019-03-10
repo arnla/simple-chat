@@ -10,11 +10,11 @@
       form button {height: 100%; width: 10%;}
       .left { float: left; position: relative; height: 100vh; width: 75vw; border-bottom: 1vh solid black; border-top: 1vh solid black; border-left: 1vw solid black; border-right: 0.5vw solid black;  }
       .right { margin-left: 75vw; position: relative; height: 100vh; width: 25vw; border-bottom: 1vh solid black; border-top: 1vh solid black; border-left: 0.5vw solid black; border-right: 1vw solid black; }
-      .left #messages { list-style-type: none; margin: 0; padding: 10px; height: 90vh; overflow: auto; }
+      .left #messages { list-style-type: none; margin: 0; padding: 10px; height: 90vh; overflow: auto; transform: rotate(180deg); }
       .right #users {list-style-type: none; padding: 10px; }
       hr {border: solid black;}
       h3 {margin: 5px; max-height: 5vh;}
-      .chat-message { position: relative; border: 2px solid black; padding: 10px; margin-bottom: 10px; }
+      .chat-message { position: relative; border: 2px solid black; padding: 10px; margin-bottom: 10px; transform: rotate(180deg); }
       .time-stamp { right: 10px; top: 10px; position: absolute; }
     </style>
   </head>
@@ -55,11 +55,11 @@
         // another client has sent a message to the chat
         socket.on('chat message', function(msg){
           if (msg.user === $('#usernameDisplay').text()) {
-            $('#messages').append('<li><div class="chat-message" style="border: 5px solid ' + msg.color + '">' +
+            $('#messages').prepend('<li><div class="chat-message" style="border: 5px solid ' + msg.color + '">' +
                                   '<h4 style="color: ' + msg.color + '">' + msg.user + '</h4>' +
                                   '<h4 class="time-stamp">' + msg.time + '</h4><br><p>' + msg.message + '</p></div></li>');
           } else {
-            $('#messages').append('<li><div class="chat-message" style="border: 2px solid ' + msg.color + '">' +
+            $('#messages').prepend('<li><div class="chat-message" style="border: 2px solid ' + msg.color + '">' +
                                   '<h4 style="color: ' + msg.color + '">' + msg.user + '</h4>' +
                                   '<h4 class="time-stamp">' + msg.time + '</h4><br><p>' + msg.message + '</p></div></li>');
           }
