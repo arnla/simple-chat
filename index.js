@@ -61,7 +61,7 @@ io.on('connection', function(socket){
         users.splice(i, 1);
         socket.username = newNick;
         users.push({user: socket.username, color: socket.color});
-        socket.emit('user join', socket.username);
+        socket.emit('user join', {user: socket.username, color: socket.color});
         io.emit('update online users', users);
       }
     } else { // user sent a regular message
