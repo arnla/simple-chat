@@ -69,6 +69,11 @@
           chatDiv.scrollTop = messages.scrollHeight;
         });
 
+        socket.on('color message', function(msg) {
+          $('#messages').append('<div style="text-align: center; margin-bottom: 10px;"><h5>' + msg.message +
+                                '<span style="color: ' + msg.color + '">' + msg.color + '</span></h1></div>');
+        });
+
         // another user has left the chat
         socket.on('update online users', function(data) {
           $('#users').empty();
