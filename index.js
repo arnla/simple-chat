@@ -83,7 +83,10 @@ function changeNickname(io, socket, msg, hour, minute) {
     users.splice(i, 1);
 
     // update the username for the user's past messages
-    messages.find(u => u.user === socket.username).user = newNick;
+    let toChange = messages.find(u => u.user === socket.username);
+    if (toChange !== undefined) {
+      messages.find(u => u.user === socket.username).user = newNick;
+    }
 
     socket.username = newNick;
     users.push({user: socket.username, color: socket.color});
